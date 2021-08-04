@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "601142760752",
+    "project_id": "story-4a61e",
+    "storage_bucket": "story-4a61e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601142760752:android:8e49e646a59bc09c0764f5",
+        "android_client_info": {
+          "package_name": "com.zainon.story"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601142760752-os14j2vhbvdm2b2j5p6pmes3u38q43bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIWFw6q8EasN4HKS7_hMuqgK9ugqQotb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "601142760752-os14j2vhbvdm2b2j5p6pmes3u38q43bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
