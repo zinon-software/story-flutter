@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -10,13 +11,20 @@ class AuthServices with ChangeNotifier {
   String get errorMessage => _errorMessage;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  Future signup(String email, String password) async {
+  Future signup(String name, String email, String password) async {
     try {
       setLoading(true);
       UserCredential authResult = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       User user = authResult.user;
       setLoading(false);
+      if (authResult != null) {
+        FirebaseFirestore.instance.collection('users').doc(authResult.user.uid).set({
+          'name': name,
+        });
+      } else {
+        print('pleas try later');
+      }
       return user;
     } on SocketException {
       setLoading(false);

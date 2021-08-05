@@ -24,7 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
       if (_formKey.currentState.validate()) {
         _formKey.currentState.save();
 
-        await signupProvider.signup(_email, _passwod);
+        await signupProvider.signup(_name, _email, _passwod);
         // sign up in the user w/ Firebase
       }
     }
