@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story/screens/CamiraScreen/camira_screen.dart';
 import 'package:story/screens/HomeScreens/feed_screen.dart';
 import 'package:story/screens/ProfileScreen/profile_screen.dart';
 import 'package:story/screens/SearshScreen/searsh_screen.dart';
@@ -11,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int _currentIndex = 0;
   final tabs = [
     FeedScreen(),
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Color(0xFFEDF0F6),
       body: SafeArea(
         child: tabs[_currentIndex],
-      ), 
+      ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -65,7 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   color: Color(0xFF23B66F),
-                  onPressed: () => print('Upload photo'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CamiraScreen()),
+                    );
+                  },
                   child: Icon(
                     Icons.add,
                     size: 35.0,
@@ -95,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text(''),
             ),
           ],
-          onTap: (index){
+          onTap: (index) {
             setState(() {
               _currentIndex = index;
             });

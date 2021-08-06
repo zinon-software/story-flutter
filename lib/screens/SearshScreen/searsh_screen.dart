@@ -1,52 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:story/services/post_services/post_services.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:story/screens/SearshScreen/users.dart';
+import 'package:story/screens/SearshScreen/widget/panel_widget.dart';
 
-class SearshScreen extends StatelessWidget {
+
+class SearshScreen extends StatefulWidget {
   const SearshScreen({ Key key }) : super(key: key);
 
   @override
+  _SearshScreenState createState() => _SearshScreenState();
+}
+
+class _SearshScreenState extends State<SearshScreen> {
+  final panelController = PanelController();
+  int index = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: PostsObject(),
-        // child: ListView(
-        //   physics: AlwaysScrollableScrollPhysics(),
-        //   children: <Widget>[
-        //     Padding(
-        //       padding: EdgeInsets.symmetric(horizontal: 20.0),
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: <Widget>[
-        //           Text(
-        //             'Instagram',
-        //             style: TextStyle(
-        //               fontFamily: 'Billabong',
-        //               fontSize: 32.0,
-        //             ),
-        //           ),
-        //           Row(
-        //             children: <Widget>[
-        //               IconButton(
-        //                 icon: Icon(Icons.live_tv),
-        //                 iconSize: 30.0,
-        //                 onPressed: () => print('IGTV'),
-        //               ),
-        //               SizedBox(width: 16.0),
-        //               Container(
-        //                 width: 35.0,
-        //                 child: IconButton(
-        //                   icon: Icon(Icons.send),
-        //                   iconSize: 30.0,
-        //                   onPressed: () => print('Direct Messages'),
-        //                 ),
-        //               )
-        //             ],
-        //           )
-        //         ],
-        //       ),
-        //     ),
-            
-        //   ],
-        // ),
+    final user = users[index];
+
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.person_outline),
+          onPressed: () {},
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SlidingUpPanel(
+        maxHeight: 340,
+        minHeight: 150,
+        parallaxEnabled: true,
+        parallaxOffset: 0.5,
+        controller: panelController,
+        color: Colors.transparent,
+        body: PageView(
+          children: users
+              .map((user) => Image.asset(user.urlImage, fit: BoxFit.cover))
+              .toList(),
+          onPageChanged: (index) => setState(() {
+            this.index = index;
+          }),
+        ),
+        panelBuilder: (ScrollController scrollController) => PanelWidget(
+          user: user,
+          onClickedPanel: panelController.open,
+          onClickedFollowing: () => setState(() {
+            user.isFollowing = !user.isFollowing;
+          }),
+        ),
+      ),
       );
   }
 }
