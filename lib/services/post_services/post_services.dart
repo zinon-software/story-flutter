@@ -21,11 +21,12 @@ class PostsObject extends StatelessWidget {
         crossAxisCount: 2,
         children: snapshot.data.docs.map((DocumentSnapshot document){
         return Container(
-          // child: CircleAvatar(
-          //   radius: 60.0,
-          //   backgroundColor: Colors.white,
-          //   child: Image.network(document.data()['authorImageUrl'],),
-          // ),
+          padding: EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 60.0,
+            backgroundColor: Colors.white,
+            child: Image.network(document['authorImageUrl'],),
+          ),
         );
       }).toList(),);
     },);

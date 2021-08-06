@@ -12,6 +12,10 @@ class ViewPostScreen extends StatefulWidget {
 }
 
 class _ViewPostScreenState extends State<ViewPostScreen> {
+
+  TextEditingController _commentController = TextEditingController();
+
+
   Widget _buildComment(int index) {
     return Padding(
       padding: EdgeInsets.all(10.0),
@@ -253,6 +257,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
           child: Padding(
             padding: EdgeInsets.all(12.0),
             child: TextField(
+              controller: _commentController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
@@ -299,7 +304,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     color: Color(0xFF23B66F),
-                    onPressed: () => print('Post comment'),
+                    onPressed: () => print('Post comment ${_commentController.text}' ),
                     child: Icon(
                       Icons.send,
                       size: 25.0,
