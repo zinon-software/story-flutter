@@ -31,6 +31,8 @@ class _CustomPageState extends State<CustomPage> {
   // ignore: unused_field
   UploadTask _uploadTask;
 
+  
+
   bool validateAndSave() {
     String filePath = 'posts/${DateTime.now()}.png';
     final form = formKey.currentState;
