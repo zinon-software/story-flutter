@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -23,24 +25,50 @@ class _CustomPageState extends State<CustomPage> {
   // List<File> imageFiles = [];
 
   File imageFiles;
-  // ignore: unused_field
-  String _myValue;
+  String _description;
   final formKey = GlobalKey<FormState>();
 
-  FirebaseStorage _storage = FirebaseStorage.instance;
-  // ignore: unused_field
-  UploadTask _uploadTask;
+  Future getImage(String filePath) async {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    FirebaseStorage _storage = FirebaseStorage.instance;
 
-  
+    String myUsername = '';
+    String myurlImage = '';
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .snapshots()
+        .listen((userData) {
+      setState(() {
+        myUsername = userData.data()['name'];
+        myurlImage = userData.data()['urlImage'];
+      });
+    });
+
+    if (imageFiles != null) {
+      TaskSnapshot addImg =
+          await _storage.ref().child(filePath).putFile(imageFiles);
+      if (addImg.state == TaskState.success) {
+        final String downloadUrl = await addImg.ref.getDownloadURL();
+        await FirebaseFirestore.instance.collection("posts").doc().set({
+          "authorName": myUsername,
+          "authorImageUrl": myurlImage,
+          "userUid": firebaseUser.uid,
+          "timeAgo": DateTime.now(),
+          "imageUrl": downloadUrl,
+          "description": _description
+        });
+      }
+    }
+  }
 
   bool validateAndSave() {
     String filePath = 'posts/${DateTime.now()}.png';
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      setState(() {
-        _uploadTask = _storage.ref().child(filePath).putFile(imageFiles);
-      });
+      getImage(filePath);
       return true;
     } else {
       return false;
@@ -50,12 +78,12 @@ class _CustomPageState extends State<CustomPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Center(
-        //   صورة واحدة
+          //   صورة واحدة
           child: imageFiles == null ? Text('Selet an Image') : enableUpload(),
         ),
 
         // قائمة من الصور
-        // ImageListWidget(imageFiles: imageFiles), 
+        // ImageListWidget(imageFiles: imageFiles),
 
         floatingActionButton: FloatingButtonWidget(
           onClicked: onClickedButton,
@@ -86,7 +114,7 @@ class _CustomPageState extends State<CustomPage> {
                         : null;
                   },
                   onSaved: (value) {
-                    return _myValue = value;
+                    return _description = value;
                   },
                 ),
                 SizedBox(
