@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:story/screens/CamiraScreen/page/custom_page.dart';
 
-class CamiraScreen extends StatefulWidget {
+class ImageCropperScreen extends StatefulWidget {
   @override
   _CamiraScreenState createState() => _CamiraScreenState();
 }
 
-class _CamiraScreenState extends State<CamiraScreen>
+class _CamiraScreenState extends State<ImageCropperScreen>
     with SingleTickerProviderStateMixin {
   TabController controller;
   bool isGallery = true;
@@ -22,12 +22,16 @@ class _CamiraScreenState extends State<CamiraScreen>
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Color(0xFFEDF0F6),
         appBar: AppBar(
+          backwardsCompatibility: true,
+          backgroundColor: Colors.white,
           title: Text(
             'Image Cropper',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              fontFamily: 'Billabong',
+              fontSize: 32.0,
+              color: Colors.black,
+            ),
           ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
           actions: [
             Row(
               children: [
@@ -53,4 +57,3 @@ class _CamiraScreenState extends State<CamiraScreen>
         ),
       );
 }
-

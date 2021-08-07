@@ -77,10 +77,7 @@ class _CustomPageState extends State<CustomPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          //   صورة واحدة
-          child: imageFiles == null ? Text('Selet an Image') : enableUpload(),
-        ),
+        body: imageFiles == null ? Text('Selet an Image') : enableUpload(),
 
         // قائمة من الصور
         // ImageListWidget(imageFiles: imageFiles),
@@ -98,21 +95,35 @@ class _CustomPageState extends State<CustomPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                IconButton(
+                  onPressed: validateAndSave,
+                  icon: Icon(
+                    Icons.send,
+                  ),
+                  color: Colors.black,
+                ),
                 Image.file(
                   imageFiles,
                   height: 330.0,
                   width: 600.0,
                 ),
                 SizedBox(
-                  height: 15.0,
+                  height: 5.0,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Description'),
-                  validator: (value) {
-                    return value.isEmpty
-                        ? 'Bold Description is required'
-                        : null;
-                  },
+                  autocorrect: false,
+                  style: TextStyle(color: Colors.green),
+                  decoration: new InputDecoration(
+                    fillColor: Colors.white,
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.blue)),
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
+                    labelText: 'أكتب شرحاً توضيحياً...',
+                  ),
                   onSaved: (value) {
                     return _description = value;
                   },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:story/screens/CamiraScreen/camira_screen.dart';
+import 'package:story/screens/CamiraScreen/image_cropper_screen.dart';
 import 'package:story/screens/HomeScreens/feed_screen.dart';
 import 'package:story/screens/ProfileScreen/profile_screen.dart';
 import 'package:story/screens/SearshScreen/searsh_screen.dart';
@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final tabs = [
     FeedScreen(),
     SearshScreen(),
-    CamiraScreen(),
+    ImageCropperScreen(),
     Center(child: Text("Like")),
     ProfileScreen(),
   ];
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CamiraScreen()),
+                      MaterialPageRoute(builder: (context) => ImageCropperScreen()),
                     );
                   },
                   child: Icon(
