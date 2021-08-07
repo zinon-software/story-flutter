@@ -23,13 +23,13 @@ class _CustomPageState extends State<CustomPage> {
   // List<File> imageFiles = [];
 
   File imageFiles;
+  // ignore: unused_field
   String _myValue;
   final formKey = GlobalKey<FormState>();
 
   FirebaseStorage _storage = FirebaseStorage.instance;
+  // ignore: unused_field
   UploadTask _uploadTask;
-
-  // ignore: unused_element
 
   bool validateAndSave() {
     String filePath = 'posts/${DateTime.now()}.png';
@@ -90,6 +90,7 @@ class _CustomPageState extends State<CustomPage> {
                 SizedBox(
                   height: 15.0,
                 ),
+                // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: validateAndSave,
                   elevation: 10.0,

@@ -9,6 +9,7 @@ class Utils {
     Future<File> Function(File file) cropImage,
   }) async {
     final source = isGallery ? ImageSource.gallery : ImageSource.camera;
+    // ignore: deprecated_member_use
     final pickedFile = await ImagePicker().getImage(source: source);
 
     if (pickedFile == null) 

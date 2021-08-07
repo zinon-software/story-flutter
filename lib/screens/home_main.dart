@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final tabs = [
     FeedScreen(),
     SearshScreen(),
-    Center(child: Text("Camira")),
+    CamiraScreen(),
     Center(child: Text("Like")),
     ProfileScreen(),
   ];
