@@ -27,8 +27,7 @@ class AuthServices with ChangeNotifier {
           'urlImage':'',
           'location':'',
           'bio':'',
-          'urlPhotos':'',
-          'isFollowing':'',
+          'urlPhotosPosts':'',
         });
       } else {
         print('pleas try later');

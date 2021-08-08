@@ -10,21 +10,19 @@ import 'package:story/screens/CamiraScreen/widget/floating_button.dart';
 import 'package:story/screens/CamiraScreen/utils.dart';
 
 class CustomPage extends StatefulWidget {
-  final bool isGallery;
-
-  const CustomPage({
-    Key key,
-    @required this.isGallery,
-  }) : super(key: key);
+  const CustomPage({Key key}) : super(key: key);
 
   @override
   _CustomPageState createState() => _CustomPageState();
 }
 
 class _CustomPageState extends State<CustomPage> {
+  bool isGallery = true;
+
   // List<File> imageFiles = [];
 
   File imageFiles;
+  bool isLoading = false;
   String _description;
   final formKey = GlobalKey<FormState>();
 
@@ -60,10 +58,17 @@ class _CustomPageState extends State<CustomPage> {
           "description": _description
         });
       }
+      setState(() {
+        imageFiles = null;
+        isLoading = false;
+      });
     }
   }
 
   bool validateAndSave() {
+    setState(() {
+      isLoading = true;
+    });
     String filePath = 'posts/${DateTime.now()}.png';
     final form = formKey.currentState;
     if (form.validate()) {
@@ -77,7 +82,65 @@ class _CustomPageState extends State<CustomPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: imageFiles == null ? Text('Selet an Image') : enableUpload(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 3.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    
+                    Text(
+                      'Image Cropper',
+                      style: TextStyle(
+                        fontFamily: 'Billabong',
+                        fontSize: 32.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          isGallery ? 'Gallery' : 'Camera',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        Switch(
+                          value: isGallery,
+                          onChanged: (value) =>
+                              setState(() => isGallery = value),
+                        ),
+                        SizedBox(width: 16.0),
+                        Container(
+                          width: 35.0,
+                          child: imageFiles == null
+                              ? Text('')
+                              : isLoading == true
+                              ? CircularProgressIndicator(
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.black),
+                                )
+                              :IconButton(
+                                  icon: Icon(Icons.send),
+                                  iconSize: 30.0,
+                                  onPressed: validateAndSave,
+                                ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              imageFiles == null ? Text('Selet an Image') : enableUpload(),
+            ],
+          ),
+        ),
 
         // قائمة من الصور
         // ImageListWidget(imageFiles: imageFiles),
@@ -95,13 +158,6 @@ class _CustomPageState extends State<CustomPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                IconButton(
-                  onPressed: validateAndSave,
-                  icon: Icon(
-                    Icons.send,
-                  ),
-                  color: Colors.black,
-                ),
                 Image.file(
                   imageFiles,
                   height: 330.0,
@@ -132,13 +188,13 @@ class _CustomPageState extends State<CustomPage> {
                   height: 15.0,
                 ),
                 // ignore: deprecated_member_use
-                RaisedButton(
-                  onPressed: validateAndSave,
-                  elevation: 10.0,
-                  child: Text("Add a new Post"),
-                  textColor: Colors.white,
-                  color: Colors.pink,
-                ),
+                // RaisedButton(
+                //   onPressed: validateAndSave,
+                //   elevation: 10.0,
+                //   child: Text("Add a new Post"),
+                //   textColor: Colors.white,
+                //   color: Colors.pink,
+                // ),
               ],
             ),
           )),
@@ -147,7 +203,7 @@ class _CustomPageState extends State<CustomPage> {
 
   Future onClickedButton() async {
     final file = await Utils.pickMedia(
-      isGallery: widget.isGallery,
+      isGallery: isGallery,
       cropImage: cropCustomImage,
     );
 
