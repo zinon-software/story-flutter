@@ -21,9 +21,9 @@ class AuthServices with ChangeNotifier {
       if (authResult != null) {
         FirebaseFirestore.instance.collection('users').doc(authResult.user.uid).set({
           'name': name,
-          'countFollowers':'',
-          'countFollowing':'',
-          'countPosts':'',
+          'countFollowers':0,
+          'countFollowing':0,
+          'countPosts':0,
           'urlImage':'',
           'location':'',
           'bio':'',
