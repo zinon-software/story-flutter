@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:story/models/comment_model.dart';
-import 'package:story/models/post_model.dart';
 
 class ViewPostScreen extends StatefulWidget {
-  final Post post;
+  final String postId;
+  final String authorImageUrl;
+  final String authorName;
+  final String imageUrl;
+  final String timeAgo;
 
-  ViewPostScreen({this.post});
+  ViewPostScreen(
+      {this.postId,
+      this.authorImageUrl,
+      this.authorName,
+      this.imageUrl,
+      this.timeAgo});
 
   @override
   _ViewPostScreenState createState() => _ViewPostScreenState();
 }
 
 class _ViewPostScreenState extends State<ViewPostScreen> {
-
   TextEditingController _commentController = TextEditingController();
-
 
   Widget _buildComment(int index) {
     return Padding(
@@ -108,20 +114,20 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                         child: Image(
                                           height: 50.0,
                                           width: 50.0,
-                                          image: AssetImage(
-                                              widget.post.authorImageUrl),
+                                          image: NetworkImage(
+                                              widget.authorImageUrl),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
                                   ),
                                   title: Text(
-                                    widget.post.authorName,
+                                    widget.authorName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  subtitle: Text(widget.post.timeAgo),
+                                  subtitle: Text(widget.timeAgo),
                                   trailing: IconButton(
                                     icon: Icon(Icons.more_horiz),
                                     color: Colors.black,
@@ -147,7 +153,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                   ),
                                 ],
                                 image: DecorationImage(
-                                  image: AssetImage(widget.post.imageUrl),
+                                  image: NetworkImage(widget.imageUrl),
                                   fit: BoxFit.fitWidth,
                                 ),
                               ),
@@ -289,7 +295,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                       child: Image(
                         height: 48.0,
                         width: 48.0,
-                        image: AssetImage(widget.post.authorImageUrl),
+                        image: NetworkImage(widget.authorImageUrl),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -304,7 +310,8 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     color: Color(0xFF23B66F),
-                    onPressed: () => print('Post comment ${_commentController.text}' ),
+                    onPressed: () =>
+                        print('Post comment ${_commentController.text}'),
                     child: Icon(
                       Icons.send,
                       size: 25.0,

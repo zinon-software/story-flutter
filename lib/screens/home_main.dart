@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:story/screens/CamiraScreen/image_cropper_screen.dart';
 import 'package:story/screens/HomeScreens/feed_screen.dart';
+import 'package:story/screens/NotificationScreen/notification_screen.dart';
 import 'package:story/screens/ProfileScreen/profile_screen.dart';
 import 'package:story/screens/SearshScreen/searsh_screen.dart';
 
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     FeedScreen(),
     SearshScreen(),
     ImageCropperScreen(),
-    Center(child: Text("Like")),
+    NotificationScreen(),
     ProfileScreen(),
   ];
 
