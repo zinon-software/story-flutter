@@ -90,11 +90,7 @@ class _CustomPageState extends State<CustomPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    
+                    SizedBox(width: 10,),
                     Text(
                       'Image Cropper',
                       style: TextStyle(

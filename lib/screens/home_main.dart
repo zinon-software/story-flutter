@@ -1,3 +1,4 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:story/screens/CamiraScreen/image_cropper_screen.dart';
 import 'package:story/screens/HomeScreens/feed_screen.dart';
@@ -29,84 +30,37 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: tabs[_currentIndex],
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.dashboard,
-                size: 30.0,
-                color: Colors.black,
-              ),
-              // ignore: deprecated_member_use
-              title: Text(''),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
-                size: 30.0,
-                color: Colors.black,
-              ),
-              // ignore: deprecated_member_use
-              title: Text(''),
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
-                // ignore: deprecated_member_use
-                child: FlatButton(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  color: Color(0xFF23B66F),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ImageCropperScreen()),
-                    );
-                  },
-                  child: Icon(
-                    Icons.add,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              // ignore: deprecated_member_use
-              title: Text(''),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite_border,
-                size: 30.0,
-                color: Colors.black,
-              ),
-              // ignore: deprecated_member_use
-              title: Text(''),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person_outline,
-                size: 30.0,
-                color: Colors.black,
-              ),
-              // ignore: deprecated_member_use
-              title: Text(''),
-            ),
-          ],
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-        ),
+      bottomNavigationBar: BottomNavyBar(
+        selectedIndex: _currentIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Searsh'),
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.add),
+            title: Text('Add'),
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.circle_notifications),
+            title: Text('Notification'),
+          ),
+          BottomNavyBarItem(
+            icon: Icon(Icons.person),
+            title: Text('Profile'),
+            activeColor: Colors.blueAccent,
+            inactiveColor: Colors.lightGreenAccent,
+          ),
+        ],
       ),
     );
   }

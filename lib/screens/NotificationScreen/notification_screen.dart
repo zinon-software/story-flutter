@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:story/services/post_services/post_services.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({ Key key }) : super(key: key);
@@ -31,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ],
       ),
       
-      body: PostsObject(),
+      body:Container(child: Center(child: Text('قيد التطوير'),),),
     );
   }
 }
