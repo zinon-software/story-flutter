@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
+
+
 class AuthServices with ChangeNotifier {
   bool _isLoading = false;
   String _errorMessage;
@@ -20,15 +22,19 @@ class AuthServices with ChangeNotifier {
       setLoading(false);
       if (authResult != null) {
         FirebaseFirestore.instance.collection('users').doc(authResult.user.uid).set({
+          "id": authResult.user.uid,
           'name': name,
-          'countFollowers':0,
-          'countFollowing':0,
-          'countPosts':0,
           'urlImage':'',
           'location':'',
           'bio':'',
-          'urlPhotosPosts':'',
+          "timestamp": DateTime.now(),
+          
         });
+        await FirebaseFirestore.instance.collection('followers')
+          .doc(authResult.user.uid)
+          .collection('userFollowers')
+          .doc(authResult.user.uid)
+          .set({});
       } else {
         print('pleas try later');
       }

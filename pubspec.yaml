@@ -29,6 +29,13 @@ dependencies:
   firebase_storage: ^10.0.1
 
   bottom_navy_bar: ^6.0.0
+
+  cached_network_image: ^2.0.0
+
+  flutter_svg: ^0.22.0
+  uuid: ^3.0.4
+  animator: ^2.0.0
+
   
 
 dev_dependencies:

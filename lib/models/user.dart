@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class User {
@@ -47,4 +48,31 @@ class Users {
     @required this.urlPhotos,
     this.isFollowing,
   });
+}
+
+
+class UserV2 {
+  final String id;
+  final String name;
+  final String urlImage;
+  final String bio;
+  final String location;
+
+  UserV2({
+    this.id,
+    this.name,
+    this.urlImage,
+    this.bio,
+    this.location,
+  });
+
+  factory UserV2.fromDocument(DocumentSnapshot doc) {
+    return UserV2(
+      id: doc['id'],
+      name: doc['name'],
+      urlImage: doc['urlImage'],
+      bio: doc['bio'],
+      location: doc['location'],
+    );
+  }
 }

@@ -1,9 +1,10 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:story/screens/CamiraScreen/image_cropper_screen.dart';
 import 'package:story/screens/HomeScreens/feed_screen.dart';
 import 'package:story/screens/NotificationScreen/notification_screen.dart';
-import 'package:story/screens/ProfileScreen/profile_screen.dart';
+import 'package:story/screens/ProfileScreen/pages/profile_screen.dart';
 import 'package:story/screens/SearshScreen/searsh_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     SearshScreen(),
     ImageCropperScreen(),
     NotificationScreen(),
-    ProfileScreen(),
+    // ProfileScreen(),
+    Profile(profileId: FirebaseAuth.instance.currentUser.uid),
   ];
 
   @override

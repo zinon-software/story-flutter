@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:story/screens/CamiraScreen/widget/floating_button.dart';
 // import 'package:story/screens/CamiraScreen/widget/image_list_widget.dart';
 import 'package:story/screens/CamiraScreen/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({Key key}) : super(key: key);
@@ -31,7 +32,9 @@ class _CustomPageState extends State<CustomPage> {
     FirebaseStorage _storage = FirebaseStorage.instance;
 
     String myUsername = '';
+    // ignore: unused_local_variable
     String myurlImage = '';
+    String postId = Uuid().v4();
 
     FirebaseFirestore.instance
         .collection('users')
@@ -49,14 +52,23 @@ class _CustomPageState extends State<CustomPage> {
           await _storage.ref().child(filePath).putFile(imageFiles);
       if (addImg.state == TaskState.success) {
         final String downloadUrl = await addImg.ref.getDownloadURL();
-        await FirebaseFirestore.instance.collection("posts").doc().set({
-          "authorName": myUsername,
-          "authorImageUrl": myurlImage,
-          "userUid": firebaseUser.uid,
-          "timeAgo": DateTime.now(),
-          "imageUrl": downloadUrl,
-          "description": _description
-        });
+        await FirebaseFirestore.instance
+            .collection("posts")
+            .doc(firebaseUser.uid)
+            .collection("userPosts")
+            .doc(postId)
+            .set(
+          {
+            "postId": postId,
+            "ownerId": firebaseUser.uid,
+            "username": myUsername,
+            "mediaUrl": downloadUrl,
+            "description": _description,
+            "location": '',
+            "timestamp": DateTime.now(),
+            "likes": {},
+          },
+        );
       }
       setState(() {
         imageFiles = null;
@@ -90,7 +102,9 @@ class _CustomPageState extends State<CustomPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text(
                       'Image Cropper',
                       style: TextStyle(
@@ -99,7 +113,9 @@ class _CustomPageState extends State<CustomPage> {
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Row(
                       children: <Widget>[
                         Text(
@@ -118,15 +134,16 @@ class _CustomPageState extends State<CustomPage> {
                           child: imageFiles == null
                               ? Text('')
                               : isLoading == true
-                              ? CircularProgressIndicator(
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.black),
-                                )
-                              :IconButton(
-                                  icon: Icon(Icons.send),
-                                  iconSize: 30.0,
-                                  onPressed: validateAndSave,
-                                ),
+                                  ? CircularProgressIndicator(
+                                      valueColor:
+                                          new AlwaysStoppedAnimation<Color>(
+                                              Colors.black),
+                                    )
+                                  : IconButton(
+                                      icon: Icon(Icons.send),
+                                      iconSize: 30.0,
+                                      onPressed: validateAndSave,
+                                    ),
                         )
                       ],
                     )
