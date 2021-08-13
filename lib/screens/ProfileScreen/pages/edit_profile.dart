@@ -1,22 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 import 'package:story/models/user.dart';
 import 'package:story/services/authentication_services/auth_services.dart';
-// import 'package:fluttershare/pages/timeline.dart';
-// import 'profile.dart';
+
 
 class EditProfile extends StatefulWidget {
-  final String currentUserId;
-
-  EditProfile({this.currentUserId});
 
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+  var firebaseUser = FirebaseAuth.instance.currentUser;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -35,7 +33,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       isLoading = true;
     });
-    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(widget.currentUserId).get();
+    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(firebaseUser.uid).get();
     user = UserV2.fromDocument(doc);
     displayNameController.text = user.name;
     bioController.text = user.bio;
@@ -100,7 +98,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     if (_displayNameValid && _bioValid) {
-      FirebaseFirestore.instance.collection('users').doc(widget.currentUserId).update({
+      FirebaseFirestore.instance.collection('users').doc(firebaseUser.uid).update({
         "displayName": displayNameController.text,
         "bio": bioController.text,
       });
@@ -111,7 +109,6 @@ class _EditProfileState extends State<EditProfile> {
   }
   @override
   Widget build(BuildContext context) {
-    final logoutProvider = Provider.of<AuthServices>(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -135,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
         ],
       ),
       body: isLoading
-          ? Text('Loading') //circularProgress()
+          ? Center(child: Text('Loading')) //circularProgress()
           : ListView(
               children: <Widget>[
                 Container(
@@ -174,18 +171,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        // ignore: deprecated_member_use
-                        child: FlatButton.icon(
-                          onPressed:  () async => await logoutProvider.logout(),
-                          icon: Icon(Icons.cancel, color: Colors.red),
-                          label: Text(
-                            "Logout",
-                            style: TextStyle(color: Colors.red, fontSize: 20.0),
-                          ),
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),

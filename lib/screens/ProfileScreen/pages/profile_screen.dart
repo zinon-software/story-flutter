@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:provider/provider.dart';
 import 'package:story/models/user.dart';
 import 'package:story/screens/ProfileScreen/pages/edit_profile.dart';
@@ -9,7 +8,7 @@ import 'package:story/screens/ProfileScreen/widgets/post.dart';
 import 'package:story/services/authentication_services/auth_services.dart';
 
 class Profile extends StatefulWidget {
-  final String profileId ;
+  final String profileId;
 
   Profile({this.profileId});
   @override
@@ -18,14 +17,16 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   UserV2 currentUser;
-
-
+  var firebaseUser = FirebaseAuth.instance.currentUser;
 
   getUserInFirestore() async {
-    DocumentSnapshot doc =
-        await FirebaseFirestore.instance.collection('users').doc(widget.profileId).get();
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .get();
     currentUser = UserV2.fromDocument(doc);
   }
+
   String postOrientation = "grid";
   bool isFollowing = false;
   bool isLoading = false;
@@ -46,7 +47,8 @@ class _ProfileState extends State<Profile> {
   }
 
   checkIfFollowing() async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('followers')
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('followers')
         .doc(widget.profileId)
         .collection('userFollowers')
         .doc(currentUser?.id)
@@ -57,7 +59,8 @@ class _ProfileState extends State<Profile> {
   }
 
   getFollowers() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('followers')
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('followers')
         .doc(widget.profileId)
         .collection('userFollowers')
         .get();
@@ -67,7 +70,8 @@ class _ProfileState extends State<Profile> {
   }
 
   getFollowing() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('following')
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('following')
         .doc(widget.profileId)
         .collection('userFollowing')
         .get();
@@ -80,12 +84,8 @@ class _ProfileState extends State<Profile> {
     setState(() {
       isLoading = true;
     });
-    print('--------------------------------------------------------');
-    print(widget.profileId);
-    print('--------------------------------------------------------');
-    print(currentUser?.id);
-    print('--------------------------------------------------------');
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('posts')
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('posts')
         .doc(widget.profileId)
         .collection('userPosts')
         .orderBy('timestamp', descending: true)
@@ -122,9 +122,11 @@ class _ProfileState extends State<Profile> {
 
   editProfile() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => EditProfile(currentUserId: currentUser?.id),),);
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfile(),
+      ),
+    );
   }
 
   Container buildButton({String text, Function function}) {
@@ -182,7 +184,8 @@ class _ProfileState extends State<Profile> {
       isFollowing = false;
     });
     // remove follower
-    FirebaseFirestore.instance.collection('followers')
+    FirebaseFirestore.instance
+        .collection('followers')
         .doc(widget.profileId)
         .collection('userFollowers')
         .doc(currentUser?.id)
@@ -193,7 +196,8 @@ class _ProfileState extends State<Profile> {
       }
     });
     // remove following
-    FirebaseFirestore.instance.collection('following')
+    FirebaseFirestore.instance
+        .collection('following')
         .doc(currentUser?.id)
         .collection('userFollowing')
         .doc(widget.profileId)
@@ -204,8 +208,9 @@ class _ProfileState extends State<Profile> {
       }
     });
     // delete activity feed item for them
-    FirebaseFirestore.instance.collection('feed').
-        doc(widget.profileId)
+    FirebaseFirestore.instance
+        .collection('feed')
+        .doc(widget.profileId)
         .collection('feedItems')
         .doc(currentUser?.id)
         .get()
@@ -221,19 +226,22 @@ class _ProfileState extends State<Profile> {
       isFollowing = true;
     });
     // Make auth user follower of ANOTHER user (update THEIR followers collection)
-    FirebaseFirestore.instance.collection('followers')
+    FirebaseFirestore.instance
+        .collection('followers')
         .doc(widget.profileId)
         .collection('userFollowers')
         .doc(currentUser?.id)
         .set({});
     // Put THAT user on YOUR following collection (update your following collection)
-    FirebaseFirestore.instance.collection('following')
+    FirebaseFirestore.instance
+        .collection('following')
         .doc(currentUser?.id)
         .collection('userFollowing')
         .doc(widget.profileId)
         .set({});
     // add activity feed item for that user to notify about new follower (us)
-    FirebaseFirestore.instance.collection('feed')
+    FirebaseFirestore.instance
+        .collection('feed')
         .doc(widget.profileId)
         .collection('feedItems')
         .doc(currentUser?.id)
@@ -340,8 +348,8 @@ class _ProfileState extends State<Profile> {
   buildProfilePosts() {
     if (isLoading) {
       return Center(
-            child: Text('Loading'),
-          );
+        child: Text('Loading'),
+      );
     } else if (posts.isEmpty) {
       return Container(
         child: Column(
@@ -450,10 +458,3 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
-
-
-
-
-
-
-
