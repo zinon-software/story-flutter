@@ -19,7 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final tabs = [
     // FeedScreen(),
     Timeline(),
-    SearshScreen(),
+    // SearshScreen(),
+    ActivityFeed(),
     ImageCropperScreen(),
     // NotificationScreen(),
     Search(),
