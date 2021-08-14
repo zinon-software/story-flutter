@@ -36,6 +36,8 @@ dependencies:
   uuid: ^3.0.4
   animator: ^2.0.0
 
+  timeago: 2.0.17
+
   
 
 dev_dependencies:
@@ -49,6 +51,7 @@ flutter:
   assets:
     - assets/images/
     - assets/
+    - assets/images/no_content.svg
 
 
   

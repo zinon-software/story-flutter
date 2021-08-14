@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:story/models/user.dart';
+import 'package:story/screens/ProfileScreen/pages/comments.dart';
+import 'package:story/screens/ProfileScreen/pages/profile_screen.dart';
 import 'package:story/screens/ProfileScreen/widgets/custom_image.dart';
 
 class Post extends StatefulWidget {
@@ -63,7 +65,7 @@ class Post extends StatefulWidget {
         mediaUrl: this.mediaUrl,
         likes: this.likes,
         likeCount: getLikeCount(this.likes),
-        );
+      );
 }
 
 class _PostState extends State<Post> {
@@ -92,10 +94,7 @@ class _PostState extends State<Post> {
 
   buildPostHeader() {
     return FutureBuilder(
-      future: FirebaseFirestore.instance
-          .collection('users')
-          .doc(ownerId)
-          .get(),
+      future: FirebaseFirestore.instance.collection('users').doc(ownerId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -106,27 +105,27 @@ class _PostState extends State<Post> {
         bool isPostOwner = currentUserId == ownerId;
         return ListTile(
           leading: CircleAvatar(
-                    child: ClipOval(
-                      child: Image(
-                        height: 50.0,
-                        width: 50.0,
-                        image: user.urlImage == ''
-                            ? AssetImage('assets/images/user1.png')
-                            : NetworkImage(user.urlImage),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+            child: ClipOval(
+              child: Image(
+                height: 50.0,
+                width: 50.0,
+                image: user.urlImage == ''
+                    ? AssetImage('assets/images/user1.png')
+                    : NetworkImage(user.urlImage),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-          // title: GestureDetector(
-          //   onTap: () => showProfile(context, profileId: user.id),
-          //   child: Text(
-          //     user.name,
-          //     style: TextStyle(
-          //       color: Colors.black,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
+          title: GestureDetector(
+            onTap: () => showProfile(context, profileId: user.id),
+            child: Text(
+              user.name,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           subtitle: Text(location),
           trailing: isPostOwner
               ? IconButton(
@@ -169,7 +168,7 @@ class _PostState extends State<Post> {
   deletePost() async {
     // delete post itself
     FirebaseFirestore.instance
-            .collection('posts')
+        .collection('posts')
         .doc(ownerId)
         .collection('userPosts')
         .doc(postId)
@@ -208,7 +207,8 @@ class _PostState extends State<Post> {
     bool _isLiked = likes[currentUserId] == true;
 
     if (_isLiked) {
-      FirebaseFirestore.instance.collection("posts")
+      FirebaseFirestore.instance
+          .collection("posts")
           .doc(ownerId)
           .collection('userPosts')
           .doc(postId)
@@ -220,7 +220,8 @@ class _PostState extends State<Post> {
         likes[currentUserId] = false;
       });
     } else if (!_isLiked) {
-      FirebaseFirestore.instance.collection("posts")
+      FirebaseFirestore.instance
+          .collection("posts")
           .doc(ownerId)
           .collection('userPosts')
           .doc(postId)
@@ -284,7 +285,7 @@ class _PostState extends State<Post> {
         children: <Widget>[
           cachedNetworkImage(mediaUrl),
           showHeart
-             ? Animator(
+              ? Animator(
                   duration: Duration(milliseconds: 300),
                   tween: Tween<double>(begin: 0, end: 300),
                   curve: Curves.elasticOut,
@@ -382,13 +383,21 @@ class _PostState extends State<Post> {
   }
 }
 
+showProfile(BuildContext context, {String profileId}) {
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+    return Profile(
+      profileId: profileId,
+    );
+  }));
+}
+
 showComments(BuildContext context,
     {String postId, String ownerId, String mediaUrl}) {
-  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-  //   return Comments(
-  //     postId: postId,
-  //     postOwnerId: ownerId,
-  //     postMediaUrl: mediaUrl,
-  //   );
-  // }));
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Comments(
+      postId: postId,
+      postOwnerId: ownerId,
+      postMediaUrl: mediaUrl,
+    );
+  }));
 }

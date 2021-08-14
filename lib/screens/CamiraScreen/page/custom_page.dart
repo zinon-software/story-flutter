@@ -27,7 +27,7 @@ class _CustomPageState extends State<CustomPage> {
   String _description;
   final formKey = GlobalKey<FormState>();
 
-  Future getImage(String filePath) async {
+  Future getImage() async {
     var firebaseUser = FirebaseAuth.instance.currentUser;
     FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -49,7 +49,7 @@ class _CustomPageState extends State<CustomPage> {
 
     if (imageFiles != null) {
       TaskSnapshot addImg =
-          await _storage.ref().child(filePath).putFile(imageFiles);
+          await _storage.ref().child('posts/$postId.png').putFile(imageFiles);
       if (addImg.state == TaskState.success) {
         final String downloadUrl = await addImg.ref.getDownloadURL();
         await FirebaseFirestore.instance
@@ -81,11 +81,10 @@ class _CustomPageState extends State<CustomPage> {
     setState(() {
       isLoading = true;
     });
-    String filePath = 'posts/${DateTime.now()}.png';
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      getImage(filePath);
+      getImage();
       return true;
     } else {
       return false;

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:story/models/user.dart';
 import 'package:story/screens/ProfileScreen/pages/edit_profile.dart';
@@ -355,7 +356,7 @@ class _ProfileState extends State<Profile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // SvgPicture.asset('assets/images/no_content.svg', height: 260.0),
+            SvgPicture.asset('assets/images/no_content.svg', height: 260.0),
             Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
@@ -377,7 +378,7 @@ class _ProfileState extends State<Profile> {
       });
       return GridView.count(
         crossAxisCount: 3,
-        childAspectRatio: 1.0,
+        childAspectRatio: 0.5,
         mainAxisSpacing: 1.5,
         crossAxisSpacing: 1.5,
         shrinkWrap: true,
