@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:story/models/user.dart';
 import 'package:story/screens/ProfileScreen/pages/edit_profile.dart';
 import 'package:story/screens/ProfileScreen/widgets/post.dart';
-import 'package:story/services/authentication_services/auth_services.dart';
+
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -374,13 +373,11 @@ class _ProfileState extends State<Profile> {
     } else if (postOrientation == "grid") {
       List<GridTile> gridTiles = [];
       posts.forEach((post) {
-        gridTiles.add(GridTile(child: (post)));
+        gridTiles.add(GridTile(child: Image.network((post.mediaUrl))));
+        // gridTiles.add(GridTile(child: (post)));
       });
       return GridView.count(
         crossAxisCount: 3,
-        childAspectRatio: 0.5,
-        mainAxisSpacing: 1.5,
-        crossAxisSpacing: 1.5,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: gridTiles,
