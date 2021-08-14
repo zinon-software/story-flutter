@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:story/screens/ProfileScreen/widgets/header.dart';
 import 'package:story/screens/ProfileScreen/widgets/post.dart';
 
 class PostScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class PostScreen extends StatelessWidget {
         Post post = Post.fromDocument(snapshot.data);
         return Center(
           child: Scaffold(
-            // appBar: header(context, titleText: post.description),
+            appBar: header(context, titleText: post.description),
             body: ListView(
               children: <Widget>[
                 Container(
