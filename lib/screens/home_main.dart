@@ -17,10 +17,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final tabs = [
-    FeedScreen(),
+    // FeedScreen(),
+    Timeline(),
     SearshScreen(),
     ImageCropperScreen(),
-    NotificationScreen(),
+    // NotificationScreen(),
+    Search(),
     // ProfileScreen(),
     Profile(profileId: FirebaseAuth.instance.currentUser.uid),
   ];

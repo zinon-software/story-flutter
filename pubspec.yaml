@@ -52,6 +52,7 @@ flutter:
     - assets/images/
     - assets/
     - assets/images/no_content.svg
+    - assets/images/search.svg
 
 
   
