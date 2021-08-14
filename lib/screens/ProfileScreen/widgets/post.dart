@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:animator/animator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:story/models/user.dart';
 import 'package:story/screens/ProfileScreen/pages/comments.dart';
@@ -92,6 +93,21 @@ class _PostState extends State<Post> {
     this.likeCount,
   });
 
+  @override
+  void initState() { 
+    super.initState();
+    getUserInFirestore();
+  }
+
+  UserV2 currentUser;
+  getUserInFirestore() async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserId)
+        .get();
+    currentUser = UserV2.fromDocument(doc);
+  }
+
   buildPostHeader() {
     return FutureBuilder(
       future: FirebaseFirestore.instance.collection('users').doc(ownerId).get(),
@@ -179,28 +195,28 @@ class _PostState extends State<Post> {
       }
     });
     // delete uploaded image for the post
-    // storageRef.child("post_$postId.jpg").delete();
+    FirebaseStorage.instance.ref().child("posts/$postId.png").delete();
     // then delete all activity feed notifications
-    // QuerySnapshot activityFeedSnapshot = await activityFeedRef
-    //     .document(ownerId)
-    //     .collection("feedItems")
-    //     .where('postId', isEqualTo: postId)
-    //     .getDocuments();
-    // activityFeedSnapshot.documents.forEach((doc) {
-    //   if (doc.exists) {
-    //     doc.reference.delete();
-    //   }
-    // });
+    QuerySnapshot activityFeedSnapshot = await FirebaseFirestore.instance.collection('feed')
+        .doc(ownerId)
+        .collection("feedItems")
+        .where('postId', isEqualTo: postId)
+        .get();
+    activityFeedSnapshot.docs.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
     // then delete all comments
-    // QuerySnapshot commentsSnapshot = await commentsRef
-    //     .document(postId)
-    //     .collection('comments')
-    //     .getDocuments();
-    // commentsSnapshot.documents.forEach((doc) {
-    //   if (doc.exists) {
-    //     doc.reference.delete();
-    //   }
-    // });
+    QuerySnapshot commentsSnapshot = await FirebaseFirestore.instance.collection('comments')
+        .doc(postId)
+        .collection('comments')
+        .get();
+    commentsSnapshot.docs.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
   }
 
   handleLikePost() {
@@ -245,35 +261,35 @@ class _PostState extends State<Post> {
     // add a notification to the postOwner's activity feed only if comment made by OTHER user (to avoid getting notification for our own like)
     bool isNotPostOwner = currentUserId != ownerId;
     if (isNotPostOwner) {
-      // activityFeedRef
-      //     .document(ownerId)
-      //     .collection("feedItems")
-      //     .document(postId)
-      //     .setData({
-      //   "type": "like",
-      //   "username": currentUser.username,
-      //   "userId": currentUser.id,
-      //   "userProfileImg": currentUser.photoUrl,
-      //   "postId": postId,
-      //   "mediaUrl": mediaUrl,
-      //   "timestamp": timestamp,
-      // });
+      FirebaseFirestore.instance.collection('feed')
+          .doc(ownerId)
+          .collection("feedItems")
+          .doc(postId)
+          .set({
+        "type": "like",
+        "username": currentUser.name,
+        "userId": currentUser.id,
+        "userProfileImg": currentUser.urlImage,
+        "postId": postId,
+        "mediaUrl": mediaUrl,
+        "timestamp": DateTime.now(),
+      });
     }
   }
 
   removeLikeFromActivityFeed() {
     bool isNotPostOwner = currentUserId != ownerId;
     if (isNotPostOwner) {
-      // activityFeedRef
-      //     .document(ownerId)
-      //     .collection("feedItems")
-      //     .document(postId)
-      //     .get()
-      //     .then((doc) {
-      //   if (doc.exists) {
-      //     doc.reference.delete();
-      //   }
-      // });
+      FirebaseFirestore.instance.collection('feed')
+          .doc(ownerId)
+          .collection("feedItems")
+          .doc(postId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
     }
   }
 
