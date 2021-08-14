@@ -422,28 +422,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final logoutProvider = Provider.of<AuthServices>(context);
+    // final logoutProvider = Provider.of<AuthServices>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            fontFamily: 'Billabong',
-            fontSize: 32.0,
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () async => await logoutProvider.logout(),
-            icon: Icon(
-              Icons.exit_to_app,
-            ),
-            color: Colors.black,
-          ),
-        ],
-      ),
       backgroundColor: Color(0xFFEDF0F6),
       body: ListView(
         children: <Widget>[
