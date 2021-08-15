@@ -183,7 +183,7 @@ class _EditProfileState extends State<EditProfile> {
                             top: 16.0,
                             bottom: 8.0,
                           ),
-                          child: user.urlImage == ''
+                          child: user.urlImage == '' && imageFiles == null
                               ? CircleAvatar(
                                   radius: 50.0,
                                   child: IconButton(

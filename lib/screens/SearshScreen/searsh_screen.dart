@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:story/models/user.dart';
 import 'package:story/screens/ProfileScreen/pages/post_screen.dart';
 import 'package:story/screens/ProfileScreen/pages/profile_screen.dart';
 import 'package:story/screens/ProfileScreen/widgets/header.dart';
@@ -15,33 +14,20 @@ class ActivityFeed extends StatefulWidget {
 }
 
 class _ActivityFeedState extends State<ActivityFeed> {
-
-  UserV2 currentUser;
-  getUserInFirestore() async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get();
-    currentUser = UserV2.fromDocument(doc);
-  }
-
-  @override
-  void initState() {
-    getUserInFirestore();
-    super.initState();
-  }
-
   getActivityFeed() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('feed')
-        .doc(currentUser?.id)
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('feed')
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('feedItems')
         .orderBy('timestamp', descending: true)
         .limit(50)
         .get();
+
     List<ActivityFeedItem> feedItems = [];
     snapshot.docs.forEach((doc) {
+      print('Activity Feed Item: ${doc.data}');
       feedItems.add(ActivityFeedItem.fromDocument(doc));
-      //   print('Activity Feed Item: ${doc.data}');
+      print('Activity Feed Item: ${doc.data}');
     });
     return feedItems;
   }
@@ -58,6 +44,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
             if (!snapshot.hasData) {
               return circularProgress();
             }
+            print(snapshot.data);
             return ListView(
               children: snapshot.data,
             );
@@ -194,11 +181,13 @@ class ActivityFeedItem extends StatelessWidget {
 
 showProfile(BuildContext context, {String profileId}) {
   Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Profile(
-                profileId: profileId,
-              )));
+    context,
+    MaterialPageRoute(
+      builder: (context) => Profile(
+        profileId: profileId,
+      ),
+    ),
+  );
 }
 
 
