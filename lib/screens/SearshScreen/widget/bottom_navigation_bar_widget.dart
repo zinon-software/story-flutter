@@ -19,7 +19,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         items: icons
             .map((icon) =>
                 // ignore: deprecated_member_use
-                BottomNavigationBarItem(icon: icon, title: Container()))
+                BottomNavigationBarItem(icon: icon, label: 'Container'),)
             .toList(),
       );
 }

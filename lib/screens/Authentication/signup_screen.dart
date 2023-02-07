@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story/services/authentication_services/auth_services.dart';
 
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key key, this.toggleScreen}) : super(key: key);
 
@@ -38,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Instagram',
+                  'أسم التطبيق',
                   style: TextStyle(
                     fontFamily: 'Billabong',
                     fontSize: 50.0,
